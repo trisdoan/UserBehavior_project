@@ -1,2 +1,1 @@
-# UserBehavior_project
-AWS services
+# user_behavior_project

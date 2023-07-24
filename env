@@ -1,0 +1,4 @@
+AIRFLOW_CONN_REDSHIFT=postgres://tris:tris1234@host:5439/dev
+AIRFLOW_CONN_AWS_DEFAULT=aws://
+AIRFLOW_VAR_EMR_ID=aws_emr_cluster.tris_emr_cluster.id
+AIRFLOW_VAR_BUCKET=aws_s3_bucket.tris_data_lake.name
