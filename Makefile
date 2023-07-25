@@ -12,6 +12,9 @@ up: get-data perms docker-up
 
 down:
 	docker compose down
+
+sh:
+	docker exec -ti webserver bash
 ####################################################################################################################
 # Set up cloud infrastructure
 tf-init:
@@ -48,3 +51,9 @@ redshift-rollback:
 	docker exec -ti webserver yoyo rollback --no-config-file --database redshift://$$(terraform -chdir=./terraform output -raw redshift_user):$$(terraform -chdir=./terraform output -raw redshift_password)@$$(terraform -chdir=./terraform output -raw redshift_dns_name):5439/dev ./migrations
 
 warehouse-data-migration: spectrum-migration redshift-migration
+
+####################################################################################################################
+# Helpers
+
+ssh-ec2:
+	terraform -chdir=./terraform output -raw private_key > private_key.pem && chmod 600 private_key.pem && ssh -o StrictHostKeyChecking=no -o IdentitiesOnly=yes -i private_key.pem ubuntu@$$(terraform -chdir=./terraform output -raw ec2_public_dns) && rm private_key.pem
