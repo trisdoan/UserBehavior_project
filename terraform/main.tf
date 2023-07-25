@@ -217,7 +217,7 @@ resource "aws_instance" "tris_ec2" {
     Name = "tris_ec2"
   }
 
-user_data = <<EOF
+  user_data = <<EOF
 #!/bin/bash
 
 echo "-------------------------START AIRFLOW SETUP---------------------------"
@@ -260,6 +260,7 @@ make up
 echo "-------------------------END AIRFLOW SETUP---------------------------"
 
 EOF
+
 }
 
 # Setting as budget monitor, so we don't go over 5 USD per month
