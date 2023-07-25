@@ -27,6 +27,7 @@ resource "aws_s3_bucket" "tris-data-lake" {
 resource "aws_s3_bucket_acl" "tris-data-lake-acl" {
     bucket = aws_s3_bucket.tris-data-lake.id
     acl    = "public-read-write"
+
 }
 
 # IAM role for EC2 to connect to AWS Redshift, S3, EMR
@@ -98,7 +99,7 @@ resource "aws_security_group" "tris_security_group" {
     }
 
     tags = {
-        Name = "sde_security_group"
+        Name = "tris_security_group"
     }
 }
 
@@ -242,7 +243,7 @@ sudo chmod 666 /var/run/docker.sock
 
 sudo apt install make
 echo 'Clone git repo to EC2'
-cd /home/ubuntu && git clone https://github.com/trisdoan/user_behavior_project.git && cd user_behavior_project && make perms
+cd /home/ubuntu && git clone https://github.com/trisdoan/UserBehavior_project.git && cd UserBehavior_project && make perms
 
 echo 'Setup Airflow environment variables'
 echo "
