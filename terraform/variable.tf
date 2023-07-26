@@ -50,3 +50,10 @@ variable "redshift_node_type" {
   type        = string
   default     = "dc2.large"
 }
+
+##repository url
+variable "repo_url" {
+  description = "Repository url to clone into production machine"
+  type        = string
+  default     = "https://github.com/trisdoan/UserBehavior_project.git"
+}
