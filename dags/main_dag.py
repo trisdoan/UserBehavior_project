@@ -60,7 +60,7 @@ user_purchase_to_stage_data_lake = PythonOperator(
         "file_name": "/opt/airflow/temp/user_purchase.csv",
         "key": "stage/user_purchase/{{ ds }}/user_purchase.csv",
         "bucket_name": BUCKET_NAME,
-        "remove_local": True,
+        "remove_local": "true",
     },
 )
     
