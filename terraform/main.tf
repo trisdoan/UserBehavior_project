@@ -246,11 +246,13 @@ echo 'Clone git repo to EC2'
 cd /home/ubuntu && git clone ${var.repo_url} && cd UserBehavior_project && make perms
 
 echo 'Setup Airflow environment variables'
-export AIRFLOW_CONN_REDSHIFT=postgres://${var.redshift_user}:${var.redshift_password}@${aws_redshift_cluster.tris_redshift_cluster.endpoint}/dev
-export AIRFLOW_CONN_POSTGRES_DEFAULT=postgres://airflow:airflow@localhost:5439/airflow
-export AIRFLOW_CONN_AWS_DEFAULT=aws://?region_name=${var.aws_region}
-export AIRFLOW_VAR_EMR_ID=${aws_emr_cluster.tris_emr_cluster.id}
-export AIRFLOW_VAR_BUCKET=${aws_s3_bucket.tris-data-lake.id}
+echo "
+AIRFLOW_CONN_REDSHIFT=postgres://${var.redshift_user}:${var.redshift_password}@${aws_redshift_cluster.tris_redshift_cluster.endpoint}/dev
+AIRFLOW_CONN_POSTGRES_DEFAULT=postgres://airflow:airflow@localhost:5439/airflow
+AIRFLOW_CONN_AWS_DEFAULT=aws://?region_name=${var.aws_region}
+AIRFLOW_VAR_EMR_ID=${aws_emr_cluster.tris_emr_cluster.id}
+AIRFLOW_VAR_BUCKET=${aws_s3_bucket.tris-data-lake.id}
+" > env
 
 echo 'Start Airflow containers'
 make up
