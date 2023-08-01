@@ -24,7 +24,27 @@ resource "aws_s3_bucket" "tris-data-lake" {
     force_destroy = true
 }
 
+resource "aws_s3_bucket_ownership_controls" "tris-data-lake-ownership" {
+  bucket = aws_s3_bucket.tris-data-lake.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "tris-data-lake-access-block" {
+  bucket = aws_s3_bucket.tris-data-lake.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
 resource "aws_s3_bucket_acl" "tris-data-lake-acl" {
+    depends_on = [
+    aws_s3_bucket_ownership_controls.tris-data-lake-ownership,
+    aws_s3_bucket_public_access_block.tris-data-lake-access-block,]
+    
     bucket = aws_s3_bucket.tris-data-lake.id
     acl    = "public-read-write"
 
@@ -72,6 +92,28 @@ resource "aws_iam_role" "tris_redshift_iam_role" {
 }
 
 #Security group for access to EC2
+resource "aws_vpc" "mainvpc" {
+  cidr_block = "10.1.0.0/16"
+}
+
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.mainvpc.id
+
+  ingress {
+    protocol  = -1
+    self      = true
+    from_port = 0
+    to_port   = 0
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_security_group" "tris_security_group" {
     name = "tris_security_group"
     description = "Security group to allow inbound SCP & outbound 8080 (Airflow) connections"

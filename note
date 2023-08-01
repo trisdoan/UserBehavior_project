@@ -1,0 +1,88 @@
+
+############ IDEA #####################
+- testing
+	- check how to use great expectationss
+		https://www.startdataengineering.com/post/ensuring-data-quality-with-great-expectations/
+	- intergrate to userbehavior_project	
+
+
+- practice with l0w-effort project
+	https://www.startdataengineering.com/post/build-a-simple-data-engineering-platform/
+		
+
+- changing the redshift and emr instance  TO Local 
+	- https://cevo.com.au/post/develop-and-test-apache-spark-apps-for-emr-locally-using-docker/
+	- set up testing local
+		https://www.startdataengineering.com/post/setting-up-e2e-tests/
+		
+		
+	file -> local system -> docker EMR -> docker postgres 
+
+
+######### INSIGHT ###########
+- use this command to check env
+	printenv
+	echo $HOME
+
+
+ clicking on the first task in the DAG and pressing clear, you will be prompted and asked if you want to clear all dependent tasks, press ok. This should allow you to rerun your DAG
+ 
+ 
+ 
+ 1- Sign-in into AWS Console 2- Search in AWS console for 'Security groups' - You will get 'Security groups (ECS feature)' 3- Select Inbound rules tab < select edit inbound rules (Add Rule: Type=Redshift, Source=MyIP. (auto-fill), Save it.) 4- Also In Redshift- Open your Cluster < Actions < Modify publically accessible setting < Enable < Save Changes
+
+
+
+psql -f ./redshift_setup.sql postgres://$REDSHIFT_USER:$REDSHIFT_PASSWORD@$REDSHIFT_HOST:$REDSHIFT_PORT/dev
+	
+	It is a cli command used to connect to redshift or postgres databases.
+
+
+check setup_infra.sh file -> if current file need to change
+
+############ CONSIDERATION ################
+
+Idempotent data pipeline
+	- when re-run a failed task, output should be same than task run successfullly
+	
+
+monitoring
+
+	-data pipeline can be monitored from the Airflow UI. EMR Steps can be monitored via the AWS UI.
+	
+	- using datadog/cloud watch -> alerting in case of task failures, data quality issues, hanging tasks, etc.
+	
+	
+
+Concurrent runs
+
+	- Figuring out the blocking task is left as an exercise for the reader.
+	
+	
+
+Changing DAG frequency
+	
+	What are the changes necessary to run this DAG every hour? How will the table schema need to change to support this? Do you have to rename the DAG?
+
+
+Backfills
+	- there is a chance in code -> how to re-run pipeline for past 3 weeks
+	
+	- run backfil job:
+		https://airflow.apache.org/docs/apache-airflow/stable/cli-and-env-variables-ref.html#backfill
+		-> Prefix the command with docker exec -d beginner_de_project_airflow-webserver_1 to run it on our Airflow docker container.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
