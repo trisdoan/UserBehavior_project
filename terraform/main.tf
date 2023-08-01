@@ -91,19 +91,13 @@ resource "aws_iam_role" "tris_redshift_iam_role" {
     managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess", "arn:aws:iam::aws:policy/AWSGlueConsoleFullAccess"]
 }
 
-#Security group for access to EC2
-resource "aws_vpc" "mainvpc" {
-  cidr_block = "10.1.0.0/16"
-}
-
 resource "aws_default_security_group" "default" {
-  vpc_id = aws_vpc.mainvpc.id
-
   ingress {
     protocol  = -1
     self      = true
     from_port = 0
     to_port   = 0
+    cidr_blocks      = []
   }
 
   egress {
@@ -112,6 +106,10 @@ resource "aws_default_security_group" "default" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  name          = "default"
+  tags          = {
+        Name = "tris_security_group"
+    }
 }
 
 resource "aws_security_group" "tris_security_group" {
@@ -213,11 +211,9 @@ resource "redshift_schema" "external_from_glue_data_catalog" {
   owner = var.redshift_user
   external_schema {
     database_name = "spectrum"
-    data_catalog_source {
-      region                                 = var.aws_region
-      iam_role_arns                          = [aws_iam_role.tris_redshift_iam_role.arn]
-      create_external_database_if_not_exists = true
-    }
+    create_external_database_if_not_exists = true
+    iam_role_arns                          = [aws_iam_role.tris_redshift_iam_role.arn]
+    region                                 = var.aws_region
   }
 }
 
@@ -290,7 +286,7 @@ cd /home/ubuntu && git clone ${var.repo_url} && cd UserBehavior_project && make 
 echo 'Setup Airflow environment variables'
 echo "
 AIRFLOW_CONN_REDSHIFT=postgres://${var.redshift_user}:${var.redshift_password}@${aws_redshift_cluster.tris_redshift_cluster.endpoint}/dev
-AIRFLOW_CONN_POSTGRES_DEFAULT=postgres://airflow:airflow@localhost:5439/airflow
+AIRFLOW_CONN_POSTGRES_DEFAULT=postgres://airflow:airflow@localhost:5432/airflow
 AIRFLOW_CONN_AWS_DEFAULT=aws://?region_name=${var.aws_region}
 AIRFLOW_VAR_EMR_ID=${aws_emr_cluster.tris_emr_cluster.id}
 AIRFLOW_VAR_BUCKET=${aws_s3_bucket.tris-data-lake.id}
