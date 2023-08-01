@@ -91,27 +91,6 @@ resource "aws_iam_role" "tris_redshift_iam_role" {
     managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess", "arn:aws:iam::aws:policy/AWSGlueConsoleFullAccess"]
 }
 
-resource "aws_default_security_group" "default" {
-  ingress {
-    protocol  = -1
-    self      = true
-    from_port = 0
-    to_port   = 0
-    cidr_blocks      = []
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  name          = "default"
-  tags          = {
-        Name = "tris_security_group"
-    }
-}
-
 resource "aws_security_group" "tris_security_group" {
     name = "tris_security_group"
     description = "Security group to allow inbound SCP & outbound 8080 (Airflow) connections"
@@ -211,9 +190,11 @@ resource "redshift_schema" "external_from_glue_data_catalog" {
   owner = var.redshift_user
   external_schema {
     database_name = "spectrum"
-    create_external_database_if_not_exists = true
-    iam_role_arns                          = [aws_iam_role.tris_redshift_iam_role.arn]
-    region                                 = var.aws_region
+    data_catalog_source {
+      region                                 = var.aws_region
+      iam_role_arns                          = [aws_iam_role.tris_redshift_iam_role.arn]
+      create_external_database_if_not_exists = true
+    }
   }
 }
 
