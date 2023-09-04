@@ -2,6 +2,12 @@
 
 Here you want to write a short overview of the goals of your project and how it works at a high level. If possible, include one or two images of the end product and architecture diagram (see examples below). diagrams.net is a great tool for creating architecture diagrams.
 
+It is a Batch project which I learned from this blog: https://www.startdataengineering.com/
+
+The goal of the project is to learn how to run a proper batch data pipeline.
+
+Basically, how it works at a high level
+
 ### Data Visualization
 
 ![Example dashboard image](example-dashboard.png)
