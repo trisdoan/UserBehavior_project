@@ -1,0 +1,7 @@
+note.txt
+__MACOSX/
+data/
+logs/
+data.zip
+*/__pycache__/
+*/*/__pycache__/
