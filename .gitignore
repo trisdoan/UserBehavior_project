@@ -5,3 +5,6 @@ logs/
 data.zip
 */__pycache__/
 */*/__pycache__/
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate

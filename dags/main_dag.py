@@ -129,7 +129,7 @@ wait_for_movie_classification_transform =  EmrStepSensor(
 generate_user_behavior_metric = PostgresOperator(
     dag=dag,
     task_id="generate_user_behavior_metric",
-    sql="./scripts/sql/unload_user_purchase.sql",
+    sql="./scripts/sql/generate_user_behavior_metric.sql",
     postgres_conn_id="redshift",
 )
 

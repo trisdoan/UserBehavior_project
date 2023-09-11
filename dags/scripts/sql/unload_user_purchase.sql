@@ -7,5 +7,5 @@ COPY (
               unit_price,
               customer_id,
               country
-       from retail.user_purchase -- we should have a date filter here to pull only required data
+       from retail.user_purchase 
 ) TO '{{ params.user_purchase }}' WITH (FORMAT CSV, HEADER);
